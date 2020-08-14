@@ -95,13 +95,30 @@ class BalanceController extends Controller
      * @param  \App\Balance  $balance
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Balance $balance)
+    public function destroy(Request $request, Balance $balance)
     {
-        //
+
+        $name = $request->input('name');
+
+        $balance = Balance::where('name', $name)->first();
+
+        if ($balance === null && (strlen($name) > 0)) {
+            return $name . " does not exist in the database";
+        }
+
+        $balance->delete();
+
+        $reply = $name . ' ' . "deleted successfully.";
+
+        $response = response()->json([
+            'Response' => $reply,
+        ]);
+
+        return $response;
     }
+
     public static function session(Request $request)
     {
-        //$request->all();
         $text = $request->input('text');
         $session_id = $request->input('sessionId');
         $phone_number = $request->input('phoneNumber');
@@ -109,9 +126,6 @@ class BalanceController extends Controller
         $network_code = $request->input('networkCode');
         $level = explode("*", $text);
 
-        // print_r($level);
-        // exit();
-        //if (isset($text)) {
 
         if ($text == "") {
             $response = "CON Welcome John Doe\n";
@@ -211,12 +225,11 @@ class BalanceController extends Controller
         return $kings;
     }
 
-    public function make(Request $request)
+    public function apiCreate(Request $request)
     {
 
         $request->validate([
             'name' => 'required',
-            // 'introduction' => 'required',
         ]);
         Balance::create($request->all());
 

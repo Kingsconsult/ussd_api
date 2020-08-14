@@ -18,8 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('ussd-session', 'BalanceController@session');
+Route::post('ussd', 'BalanceController@session');
 Route::post('databalance', 'BalanceController@getBalance');
-Route::get('apiIndex', 'BalanceController@apiIndex');
+Route::get('index', 'BalanceController@apiIndex');
 Route::get('kings', 'BalanceController@kings');
-Route::post('make', 'BalanceController@make');
+Route::post('create', 'BalanceController@apiCreate');
+Route::post('delete', 'BalanceController@destroy');
