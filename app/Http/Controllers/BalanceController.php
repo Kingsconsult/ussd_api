@@ -155,7 +155,6 @@ class BalanceController extends Controller
     {
         $validate = Validator::make($request->all(), [
             'session_id' => 'required',
-            // 'phone_no' => 'required'
         ]);
         if ($validate->fails()) {
             return response()->json(['error' => $validate->errors()], 400);
@@ -175,12 +174,7 @@ class BalanceController extends Controller
         }
 
 
-        // print_r($user);
-        // exit();
-
         $code = $request['code'];
-
-        // $user = Balance::where('phone_no', $phone_no)->first();
 
         if (isset($user->phone_no)) {
             if ($code == "") {
