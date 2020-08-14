@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
+
 use App\Balance;
 use Illuminate\Http\Request;
 
-use Validator;
 use illuminate\Http\Response;
 
 
@@ -18,7 +19,10 @@ class BalanceController extends Controller
      */
     public function index()
     {
-        //
+        $balances = Balance::latest()->paginate(5);
+
+        return view('balances.index', compact('balances'))
+            ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -28,7 +32,9 @@ class BalanceController extends Controller
      */
     public function create()
     {
-        //
+        $balance = Balance::latest()->first();
+
+        return view('balances.create', compact('balance'));
     }
 
     /**
@@ -39,7 +45,14 @@ class BalanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'phone_no' => 'required',
+        ]);
+
+        Balance::create($request->all());
+
+        return redirect()->back()->with('success', 'Balance created successfully.');
     }
 
     /**
@@ -155,11 +168,11 @@ class BalanceController extends Controller
         };
         $user = Balance::where('phone_no', $request['phone_no'])->first();
 
-        // if(($user== null)){
-        //     $response = "END\n Number does not exist. \n";
-        //     $response .= "Check the number and try again later. \n";
-        //     $response .= "Thanks for using using Kings Network . \n";
-        // }
+        if ($user === null && (strlen($phone_no) > 0)) {
+            $response = "END\n Number does not exist. \n";
+            $response .= "Check the number and try again later. \n";
+            $response .= "Thanks for using Kings Network . \n";
+        }
 
 
         // print_r($user);
@@ -171,13 +184,13 @@ class BalanceController extends Controller
 
         if (isset($user->phone_no)) {
             if ($code == "") {
-                $response = "CON\n 1. Enter 1 to check your data balance.\n";
+                $response = "CON\n 1. $user->name Enter 1 to check your  balance.\n";
                 $response .= "2. Enter 2 to quit";
             }
 
             if ($code == 1) {
                 $response = response()->json([
-                    'data_bal' => (float) $user->balance,
+                    'Account bal' => (float) $user->balance,
                 ]);
             }
 
