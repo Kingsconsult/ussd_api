@@ -19,4 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('ussd-session', 'BalanceController@session');
-Route::post('databalance/{phone_no}', 'BalanceController@getBalance');
+Route::post('databalance', 'BalanceController@getBalance');

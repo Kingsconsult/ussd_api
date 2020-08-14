@@ -142,15 +142,33 @@ class BalanceController extends Controller
     {
         $validate = Validator::make($request->all(), [
             'session_id' => 'required',
-            'phone_no' => 'required'
+            // 'phone_no' => 'required'
         ]);
         if ($validate->fails()) {
             return response()->json(['error' => $validate->errors()], 400);
         }
+
         $phone_no = $request['phone_no'];
 
+        if (!isset($phone_no)) {
+            $response = "CON 1. Enter phone number. \n";
+        };
+        $user = Balance::where('phone_no', $request['phone_no'])->first();
+
+        // if(($user== null)){
+        //     $response = "END\n Number does not exist. \n";
+        //     $response .= "Check the number and try again later. \n";
+        //     $response .= "Thanks for using using Kings Network . \n";
+        // }
+
+
+        // print_r($user);
+        // exit();
+
         $code = $request['code'];
-        $user = Balance::where('phone_no', $phone_no)->first();
+
+        // $user = Balance::where('phone_no', $phone_no)->first();
+
         if (isset($user->phone_no)) {
             if ($code == "") {
                 $response = "CON\n 1. Enter 1 to check your data balance.\n";
@@ -165,7 +183,7 @@ class BalanceController extends Controller
 
             if ($code == 2) {
                 $response = "END\n Transaction Completed \n";
-                $response .= "Thanks for using MTN \n";
+                $response .= "Thanks for using using Kings Network \n";
             }
         }
         return $response;
