@@ -195,4 +195,33 @@ class BalanceController extends Controller
         }
         return $response;
     }
+
+    public function apiIndex()
+    {
+        $balances = Balance::all();
+
+        return $balances;
+    }
+
+    public function kings()
+    {
+
+        $kings = Balance::select('name', 'phone_no', 'balance')->where('name', 'kings')->first();
+
+        return $kings;
+    }
+
+    public function make(Request $request)
+    {
+
+        $request->validate([
+            'name' => 'required',
+            // 'introduction' => 'required',
+        ]);
+        Balance::create($request->all());
+
+        $kings = Balance::latest()->first();
+
+        return $kings;
+    }
 }

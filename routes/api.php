@@ -20,3 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('ussd-session', 'BalanceController@session');
 Route::post('databalance', 'BalanceController@getBalance');
+Route::get('apiIndex', 'BalanceController@apiIndex');
+Route::get('kings', 'BalanceController@kings');
+Route::post('make', 'BalanceController@make');
