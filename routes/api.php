@@ -21,6 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('ussd', 'BalanceController@session');
 Route::post('databalance', 'BalanceController@getBalance');
 Route::get('index', 'BalanceController@apiIndex');
-Route::get('kings', 'BalanceController@kings');
+Route::post('unique', 'BalanceController@unique');
 Route::post('create', 'BalanceController@apiCreate');
 Route::post('delete', 'BalanceController@destroy');

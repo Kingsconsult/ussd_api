@@ -98,7 +98,7 @@ class BalanceController extends Controller
     public function destroy(Request $request, Balance $balance)
     {
 
-        $name = $request->input('name');
+        $name = $request->name;
 
         $balance = Balance::where('name', $name)->first();
 
@@ -217,12 +217,18 @@ class BalanceController extends Controller
         return $balances;
     }
 
-    public function kings()
+    public function unique(Request $request)
     {
+        $requested = $request->name;
 
-        $kings = Balance::select('name', 'phone_no', 'balance')->where('name', 'kings')->first();
+        $balance = Balance::where('name', $requested)->first();
+        if ($balance === null && (strlen($requested) > 0)) {
+            return $requested . " does not exist in the database";
+        }
 
-        return $kings;
+        $entity = Balance::select('name', 'phone_no', 'balance')->where('name', $requested)->first();
+
+        return $entity;
     }
 
     public function apiCreate(Request $request)
